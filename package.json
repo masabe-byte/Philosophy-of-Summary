@@ -4,8 +4,23 @@
   "private": true,
   "description": "A focused one-sentence summary habit trainer.",
   "scripts": {
-    "dev": "node server.js",
-    "check": "node --check app.js && node --check server.js && node --check api/ai.js && node --check api/model-selector-remote.js && node --check lib/summary-core.js && node scripts/smoke-check.js"
+    "dev": "vite --host 127.0.0.1 --port 4177",
+    "build": "vite build",
+    "serve": "node server.js",
+    "check": "node --check server.js && node --check api/ai.js && node --check api/model-selector-remote.js && node --check lib/summary-core.js && npm run build"
   },
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "dependencies": {
+    "lucide-react": "^1.17.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.2",
+    "autoprefixer": "^10.5.0",
+    "playwright": "^1.60.0",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^3.4.18",
+    "vite": "^8.0.16"
+  }
 }

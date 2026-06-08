@@ -4,6 +4,7 @@ const path = require("path");
 const { getAiStatus, processSummaryRequest } = require("./lib/summary-core");
 
 const root = __dirname;
+const staticRoot = fs.existsSync(path.join(root, "dist", "index.html")) ? path.join(root, "dist") : root;
 const preferredPort = Number(process.env.PORT || 4177);
 const ALLOWED_SELECTOR_ENDPOINTS = [
   "https://pn4w9qze.vercel.app/api/selector-state",
@@ -94,8 +95,8 @@ function safeFilePath(urlPath) {
     return "";
   }
   const relativePath = cleanPath === "/" ? "index.html" : cleanPath.replace(/^\/+/, "");
-  const filePath = path.resolve(root, relativePath);
-  const relativeToRoot = path.relative(root, filePath);
+  const filePath = path.resolve(staticRoot, relativePath);
+  const relativeToRoot = path.relative(staticRoot, filePath);
   return relativeToRoot && !relativeToRoot.startsWith("..") && !path.isAbsolute(relativeToRoot) ? filePath : "";
 }
 

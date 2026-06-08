@@ -2,12 +2,15 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
     },
     {
-      "src": "**/*",
-      "use": "@vercel/static"
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
@@ -19,13 +22,10 @@
       "src": "/api/model-selector-remote",
       "dest": "/api/model-selector-remote.js"
     },
-    {
-      "src": "/",
-      "dest": "/index.html"
-    },
+    { "handle": "filesystem" },
     {
       "src": "/(.*)",
-      "dest": "/$1"
+      "dest": "/index.html"
     }
   ]
 }

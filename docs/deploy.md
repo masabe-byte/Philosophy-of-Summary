@@ -38,7 +38,12 @@ git push -u origin main
 
 ## 3. Vercel
 
-在 Vercel 导入 GitHub 仓库即可。
+在 Vercel 导入 GitHub 仓库即可。项目使用 Vite 构建，`vercel.json` 已配置静态构建和两个 API：
+
+```text
+/api/ai
+/api/model-selector-remote
+```
 
 本项目不需要配置模型 API Key 环境变量：
 
@@ -63,4 +68,4 @@ npm run check
 npm run dev
 ```
 
-默认端口从 `4177` 开始。
+开发端口为 `http://127.0.0.1:4177/`。

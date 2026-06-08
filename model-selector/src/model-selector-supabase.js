@@ -48,7 +48,6 @@ export function createServiceStateStorageAdapter(endpoint = DEFAULT_SELECTOR_STA
           ...selectorServiceHeaders(accessToken)
         },
         body: JSON.stringify({
-          libraries: state.libraries,
           projects: state.projects
         })
       });
