@@ -311,10 +311,16 @@ function saveCurrentDraft() {
   if (!passage) return;
   const summary = dom.summaryInput.value;
   const existing = state.attempts.find((item) => item.passageId === passage.id && item.draft);
-  if (existing) existing.summary = summary;
-  else state.attempts.push({ id: createId("d"), passageId: passage.id, summary, draft: true, createdAt: nowIso() });
+  const at = nowIso();
+  if (existing) {
+    existing.summary = summary;
+    existing.updatedAt = at;
+  } else {
+    state.attempts.push({ id: createId("d"), passageId: passage.id, summary, draft: true, createdAt: at, updatedAt: at });
+  }
   state.updatedAt = nowIso();
   saveState();
+  scheduleCloudSync();
 }
 
 function currentDraft() {

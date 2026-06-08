@@ -42,7 +42,7 @@ const context = {
 
 vm.createContext(context);
 vm.runInContext(`${fs.readFileSync("app.js", "utf8")}
-globalThis.__summaryTest = { state, canGoNext, recordAttempt, parseImportedText };`, context);
+globalThis.__summaryTest = { state, dom, canGoNext, currentDraft, saveCurrentDraft, recordAttempt, parseImportedText };`, context);
 
 const app = context.__summaryTest;
 const tsv = app.parseImportedText("标题A\t正文A\t参考A\n标题B\t正文B\t参考B");
@@ -92,6 +92,11 @@ assert.strictEqual(fail.shouldAdvance, false);
 app.state.passages = tsv;
 app.state.currentIndex = 0;
 app.state.attempts = [];
+app.dom.summaryInput = element("summaryInput");
+app.dom.summaryInput.value = "这是当前草稿";
+app.saveCurrentDraft();
+assert.strictEqual(app.currentDraft(), "这是当前草稿");
+assert.ok(app.state.attempts.some((item) => item.draft && item.summary === "这是当前草稿"));
 assert.strictEqual(app.canGoNext(), false);
 app.recordAttempt(tsv[0], { summary: "不够", score: 40, passed: false, feedback: "不通过" });
 assert.strictEqual(app.canGoNext(), false);
