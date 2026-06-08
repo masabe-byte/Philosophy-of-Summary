@@ -172,7 +172,26 @@ function renderFeedback() {
     <section><h3>修正版</h3><p>${escapeHtml(attempt.revisedSummary || "")}</p></section>
     <details class="reference-answer"><summary>参考答案</summary><p>${escapeHtml(attempt.referenceAnswer || currentPassage()?.reference || "暂无参考答案。")}</p></details>
     <section><h3>下一步</h3><p>${escapeHtml(attempt.nextAction || "")}</p></section>
-  </article>`;
+  </article>
+  ${renderAttemptHistory(currentPassage()?.id, attempt.id)}`;
+}
+
+function renderAttemptHistory(passageId, latestId) {
+  const history = attemptsForPassage(passageId)
+    .filter((item) => item.id !== latestId)
+    .slice(-6)
+    .reverse();
+  if (!history.length) return "";
+  return `<details class="attempt-history">
+    <summary>查看本段过去尝试（${history.length}）</summary>
+    <div class="attempt-history-list">
+      ${history.map((item) => `<article class="attempt-history-item">
+        <div><strong>${escapeHtml(item.passed ? "通过" : item.forced ? "跳过" : "未通过")} · ${escapeHtml(String(item.score || 0))}</strong><span>${escapeHtml(formatTime(item.createdAt))}</span></div>
+        <p>${escapeHtml(item.summary || "")}</p>
+        ${item.feedback ? `<small>${escapeHtml(compact(item.feedback, 120))}</small>` : ""}
+      </article>`).join("")}
+    </div>
+  </details>`;
 }
 
 function renderArchive() {

@@ -105,5 +105,6 @@ assert.strictEqual(app.canForceSkip(), true);
 app.recordAttempt(tsv[0], { summary: "通过", score: 80, passed: true, feedback: "通过" });
 assert.strictEqual(app.canGoNext(), true);
 assert.strictEqual(app.canForceSkip(), false);
+assert.strictEqual(app.state.attempts.filter((item) => item.passageId === tsv[0].id && !item.draft).length, 2);
 
 console.log("smoke-check passed");

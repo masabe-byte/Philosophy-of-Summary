@@ -326,6 +326,54 @@ details summary {
   opacity: .72;
 }
 
+.attempt-history {
+  margin-top: 10px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  opacity: .82;
+}
+
+.attempt-history summary {
+  font-size: 12px;
+}
+
+.attempt-history-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.attempt-history-item {
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 9px;
+  background: rgba(255, 253, 248, .64);
+}
+
+.attempt-history-item > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.attempt-history-item strong {
+  font-size: 12px;
+}
+
+.attempt-history-item span,
+.attempt-history-item small {
+  color: var(--faint);
+  font-size: 11px;
+}
+
+.attempt-history-item p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
 .archive-list {
   display: grid;
   gap: 8px;
