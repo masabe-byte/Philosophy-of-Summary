@@ -139,7 +139,7 @@ function renderPassage() {
   dom.passageBody.textContent = passage?.body || "粘贴或上传材料后，从第一段开始训练。";
   dom.prevPassage.disabled = state.currentIndex <= 0;
   dom.nextPassage.disabled = !canGoNext();
-  dom.forceSkip.disabled = !passage || Boolean(attempt?.passed || attempt?.forced);
+  dom.forceSkip.disabled = !canForceSkip();
   dom.summaryInput.value = currentDraft();
   dom.submitSummary.disabled = submitting || !passage;
   dom.submitSummary.textContent = submitting ? "评分中..." : "评分";
@@ -350,6 +350,13 @@ function canGoNext() {
   return Boolean(attempt?.passed || attempt?.forced);
 }
 
+function canForceSkip() {
+  const passage = currentPassage();
+  if (!passage) return false;
+  const attempt = latestAttempt(passage.id);
+  return Boolean(attempt && !attempt.passed && !attempt.forced);
+}
+
 function goNext() {
   if (!canGoNext()) return;
   state.currentIndex = Math.min(state.passages.length - 1, state.currentIndex + 1);
@@ -358,6 +365,7 @@ function goNext() {
 
 function forceSkip() {
   const passage = currentPassage();
+  if (!canForceSkip()) return;
   if (!passage || !confirm("强制跳过会记录为未通过跳过。确定继续？")) return;
   recordAttempt(passage, {
     summary: dom.summaryInput.value.trim(),

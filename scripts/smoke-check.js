@@ -42,7 +42,7 @@ const context = {
 
 vm.createContext(context);
 vm.runInContext(`${fs.readFileSync("app.js", "utf8")}
-globalThis.__summaryTest = { state, dom, canGoNext, currentDraft, saveCurrentDraft, recordAttempt, parseImportedText };`, context);
+globalThis.__summaryTest = { state, dom, canGoNext, canForceSkip, currentDraft, saveCurrentDraft, recordAttempt, parseImportedText };`, context);
 
 const app = context.__summaryTest;
 const tsv = app.parseImportedText("标题A\t正文A\t参考A\n标题B\t正文B\t参考B");
@@ -98,9 +98,12 @@ app.saveCurrentDraft();
 assert.strictEqual(app.currentDraft(), "这是当前草稿");
 assert.ok(app.state.attempts.some((item) => item.draft && item.summary === "这是当前草稿"));
 assert.strictEqual(app.canGoNext(), false);
+assert.strictEqual(app.canForceSkip(), false);
 app.recordAttempt(tsv[0], { summary: "不够", score: 40, passed: false, feedback: "不通过" });
 assert.strictEqual(app.canGoNext(), false);
+assert.strictEqual(app.canForceSkip(), true);
 app.recordAttempt(tsv[0], { summary: "通过", score: 80, passed: true, feedback: "通过" });
 assert.strictEqual(app.canGoNext(), true);
+assert.strictEqual(app.canForceSkip(), false);
 
 console.log("smoke-check passed");
