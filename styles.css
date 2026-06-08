@@ -380,6 +380,35 @@ details summary {
   margin-top: 10px;
 }
 
+.archive-notice {
+  border: 1px solid rgba(138, 94, 52, .24);
+  border-radius: 10px;
+  padding: 10px;
+  background: rgba(255, 248, 238, .72);
+}
+
+.archive-notice strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 13px;
+}
+
+.archive-notice p {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.archive-notice code {
+  display: inline-block;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 3px 6px;
+  background: rgba(255, 253, 248, .76);
+  color: var(--accent);
+  font-size: 12px;
+}
+
 .archive-item {
   display: grid;
   gap: 8px;

@@ -197,6 +197,14 @@ function renderAttemptHistory(passageId, latestId) {
 function renderArchive() {
   const records = state.cloud.records || [];
   dom.archiveMeta.textContent = `${records.length} 条`;
+  if (state.cloud.status === "needs-setup" || state.cloud.status === "error") {
+    dom.archiveList.innerHTML = `<article class="archive-notice ${state.cloud.status === "needs-setup" ? "setup" : "error"}">
+      <strong>${state.cloud.status === "needs-setup" ? "云端表还没准备好" : "云端同步异常"}</strong>
+      <p>${escapeHtml(state.cloud.lastError || formatCloudError(""))}</p>
+      <code>docs/cloud-sync.sql</code>
+    </article>`;
+    return;
+  }
   dom.archiveList.innerHTML = records.map((item) => `<article class="archive-item">
     <strong>${escapeHtml(item.title || "未命名训练")}</strong>
     <p>${escapeHtml(compact(item.summary || "", 90))}</p>

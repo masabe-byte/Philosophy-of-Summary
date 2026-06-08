@@ -42,7 +42,7 @@ const context = {
 
 vm.createContext(context);
 vm.runInContext(`${fs.readFileSync("app.js", "utf8")}
-globalThis.__summaryTest = { state, dom, canGoNext, canForceSkip, currentDraft, saveCurrentDraft, recordAttempt, parseImportedText };`, context);
+globalThis.__summaryTest = { state, dom, canGoNext, canForceSkip, currentDraft, saveCurrentDraft, recordAttempt, renderArchive, parseImportedText };`, context);
 
 const app = context.__summaryTest;
 const tsv = app.parseImportedText("标题A\t正文A\t参考A\n标题B\t正文B\t参考B");
@@ -106,5 +106,12 @@ app.recordAttempt(tsv[0], { summary: "通过", score: 80, passed: true, feedback
 assert.strictEqual(app.canGoNext(), true);
 assert.strictEqual(app.canForceSkip(), false);
 assert.strictEqual(app.state.attempts.filter((item) => item.passageId === tsv[0].id && !item.draft).length, 2);
+
+app.state.cloud.status = "needs-setup";
+app.state.cloud.lastError = "云端表还没准备好：请在 Supabase 执行 docs/cloud-sync.sql";
+app.dom.archiveMeta = element("archiveMeta");
+app.dom.archiveList = element("archiveList");
+app.renderArchive();
+assert.ok(element("archiveList").innerHTML.includes("docs/cloud-sync.sql"));
 
 console.log("smoke-check passed");
