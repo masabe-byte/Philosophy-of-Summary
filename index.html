@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>怎么总结</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">一句话总结训练</p>
+        <h1>怎么总结</h1>
+      </div>
+      <div class="top-status">
+        <span id="progressLabel">0 / 0</span>
+        <span id="passLabel">通过 0</span>
+        <span id="cloudLabel">云端未连接</span>
+        <button id="modelButton" class="ghost small" type="button">模型未连接</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="side-panel">
+        <section class="panel import-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">导入材料</p>
+              <h2>训练片段</h2>
+            </div>
+            <button id="newDeck" class="ghost small" type="button">新建</button>
+          </div>
+          <textarea id="importText" class="import-box" placeholder="支持粘贴导入：
+标题<Tab>正文<Tab>参考答案
+
+或用空行 / --- 分隔多段正文。"></textarea>
+          <div class="import-actions">
+            <button id="importButton" class="primary small" type="button">导入</button>
+            <button id="sampleButton" class="ghost small" type="button">示例</button>
+            <label class="ghost small file-label">上传<input id="fileInput" type="file" accept=".txt,.tsv,.csv,.md"></label>
+          </div>
+        </section>
+
+        <section class="panel history-panel">
+          <details id="archiveDetails">
+            <summary>存档记录 <span id="archiveMeta">0 条</span></summary>
+            <div class="archive-actions">
+              <button id="cloudRefresh" class="ghost small" type="button">刷新</button>
+            </div>
+            <div id="archiveList" class="archive-list"></div>
+          </details>
+        </section>
+      </aside>
+
+      <section class="reader-panel">
+        <div class="reader-head">
+          <div>
+            <p id="passageKicker" class="eyebrow">等待导入</p>
+            <h2 id="passageTitle">先导入一组训练片段</h2>
+          </div>
+          <div class="reader-actions">
+            <button id="prevPassage" class="ghost small" type="button">上一段</button>
+            <button id="nextPassage" class="ghost small" type="button">下一段</button>
+            <button id="forceSkip" class="ghost small warn" type="button">强制跳过</button>
+          </div>
+        </div>
+        <article id="passageBody" class="passage-body">
+          这个工具用于建立一个很小但关键的习惯：读完一段话以后，不立刻继续看，而是先写一句自己的总结。
+        </article>
+      </section>
+
+      <aside class="coach-panel">
+        <section class="panel summary-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">你的输出</p>
+              <h2>一句话总结</h2>
+            </div>
+            <span id="sentenceHint" class="hint">未提交</span>
+          </div>
+          <textarea id="summaryInput" class="summary-input" placeholder="用一句话写：这段材料在什么问题下，给了什么可用判断或入口？"></textarea>
+          <div class="submit-row">
+            <span id="submitStatus" class="status-text">写完后交给 AI 评分。</span>
+            <button id="submitSummary" class="primary" type="button">评分</button>
+          </div>
+        </section>
+
+        <section id="feedbackPanel" class="panel feedback-panel is-empty">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">AI 反馈</p>
+              <h2 id="feedbackTitle">等待提交</h2>
+            </div>
+            <strong id="scoreBadge" class="score-badge">--</strong>
+          </div>
+          <div id="feedbackBody" class="feedback-body muted">提交后显示分数、是否通过、修正建议。参考答案默认隐藏。</div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "how-to-summarize",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A focused one-sentence summary habit trainer.",
+  "scripts": {
+    "dev": "node server.js",
+    "check": "node --check app.js && node --check server.js && node --check api/ai.js && node --check api/model-selector-remote.js && node --check lib/summary-core.js && node scripts/smoke-check.js"
+  },
+  "license": "UNLICENSED"
+}
