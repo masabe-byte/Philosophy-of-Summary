@@ -8,6 +8,7 @@ import {
   Flame,
   Home,
   Lock,
+  Menu,
   Scale,
   Settings,
   Upload,
@@ -48,6 +49,7 @@ function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectorReady, setSelectorReady] = useState(false);
   const [runtimeLabel, setRuntimeLabel] = useState("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const selectorRef = useRef(null);
   const cloudTimer = useRef(null);
   const didPersist = useRef(false);
@@ -131,6 +133,7 @@ function App() {
   }
 
   function handleNav(item) {
+    setMobileMenuOpen(false);
     if (item.id === "settings") {
       openSettings();
       return;
@@ -262,8 +265,88 @@ function App() {
 
   return (
     <div className="min-h-screen bg-paper text-ink">
+      <header className="sticky top-0 z-40 hidden border-b border-line bg-[#fbf7ef]/94 px-4 py-3 backdrop-blur max-[900px]:flex max-[900px]:items-center max-[900px]:gap-3">
+        <button
+          type="button"
+          onClick={() => setMobileMenuOpen(true)}
+          aria-label="打开菜单"
+          aria-expanded={mobileMenuOpen}
+          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[10px] border border-line bg-white text-[#4c4036] shadow-soft"
+        >
+          <Menu className="h-5 w-5" strokeWidth={1.8} />
+        </button>
+        <div className="min-w-0 flex-1">
+          <p className="truncate font-serif text-[18px] font-semibold leading-tight">一句话总结训练器</p>
+          <p className="mt-1 truncate text-[12px] text-[#75685d]">
+            第 {state.currentIndex + 1} / {state.passages.length} 段 · {selectorReady ? "模型已连接" : "模型未连接"}
+          </p>
+        </div>
+        <span className="shrink-0 rounded-[8px] border border-line bg-white px-3 py-1 text-[12px] text-[#6d5e50]">{progress}%</span>
+      </header>
+
+      {mobileMenuOpen ? (
+        <div className="fixed inset-0 z-50 hidden max-[900px]:block">
+          <button
+            type="button"
+            aria-label="关闭菜单"
+            onClick={() => setMobileMenuOpen(false)}
+            className="absolute inset-0 bg-[#1f1711]/24"
+          />
+          <aside className="relative z-10 flex h-full w-[min(82vw,320px)] flex-col border-r border-line bg-[#fbf7ef] px-5 py-6 shadow-[20px_0_60px_rgba(62,43,28,0.18)]">
+            <div className="mb-8 flex items-center justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-3">
+                <Feather className="h-6 w-6 shrink-0 text-clay" strokeWidth={1.8} />
+                <h1 className="truncate font-serif text-[20px] font-semibold tracking-[-0.01em]">一句话总结训练器</h1>
+              </div>
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(false)}
+                aria-label="关闭菜单"
+                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-[9px] border border-line bg-white text-[#4c4036]"
+              >
+                <X className="h-4 w-4" strokeWidth={1.8} />
+              </button>
+            </div>
+            <nav className="space-y-2">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const active = item.id === "today";
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => handleNav(item)}
+                    className={[
+                      "flex h-[50px] w-full items-center gap-3 rounded-[10px] px-3 text-left text-[15px] transition",
+                      active ? "bg-[#f7ecdf] text-ink shadow-soft ring-1 ring-[#eadbc9]" : "text-[#4c4036] hover:bg-[#f7efe5]"
+                    ].join(" ")}
+                  >
+                    <Icon className={active ? "h-5 w-5 text-clay" : "h-5 w-5 text-[#9b8e82]"} strokeWidth={1.8} />
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
+            </nav>
+            <div className="mt-auto rounded-[12px] border border-line bg-panel/72 p-4 shadow-soft">
+              <div className="flex items-center gap-3 border-b border-line pb-4">
+                <CalendarDays className="h-5 w-5 text-[#8f7968]" strokeWidth={1.7} />
+                <span className="text-[14px] text-[#5c4d41]">本组通过：</span>
+                <strong className="ml-auto text-[22px]">{passedCount + forcedCount}</strong>
+                <span className="text-[15px]">段</span>
+              </div>
+              <div className="flex items-center gap-3 pt-4">
+                <Flame className="h-5 w-5 text-[#8f7968]" strokeWidth={1.7} />
+                <span className="text-[14px] text-[#5c4d41]">剩余材料：</span>
+                <strong className="ml-auto text-[22px]">{remainingCount}</strong>
+                <span className="text-[15px]">段</span>
+              </div>
+            </div>
+          </aside>
+        </div>
+      ) : null}
+
       <div className="grid min-h-screen grid-cols-[256px_772px_412px] max-[1100px]:grid-cols-[220px_1fr] max-[900px]:grid-cols-1">
-        <aside className="flex min-h-screen flex-col border-r border-line bg-[#fbf7ef]/82 px-5 py-10 max-[900px]:min-h-0 max-[900px]:border-b max-[900px]:border-r-0">
+        <aside className="flex min-h-screen flex-col border-r border-line bg-[#fbf7ef]/82 px-5 py-10 max-[900px]:hidden">
           <div className="mb-14 flex items-center gap-3">
             <Feather className="h-7 w-7 text-clay" strokeWidth={1.8} />
             <h1 className="font-serif text-[22px] font-semibold tracking-[-0.01em]">一句话总结训练器</h1>
@@ -348,26 +431,26 @@ function App() {
                 <Divider />
                 <Hint>说明核心观点，而不是罗列细节</Hint>
               </div>
-              <div className="mt-7 flex items-center gap-5">
+              <div className="mt-7 flex items-center gap-5 max-[720px]:grid max-[720px]:grid-cols-2 max-[720px]:gap-3">
                 <button
                   type="button"
                   disabled={isSubmitting || !summaryDraft.trim()}
                   onClick={submitSummary}
-                  className="h-[52px] rounded-[8px] bg-clay px-8 text-[17px] font-semibold text-white shadow-[0_8px_20px_rgba(194,70,39,0.18)] transition hover:bg-clayDark disabled:cursor-not-allowed disabled:opacity-55"
+                  className="inline-flex h-[52px] items-center justify-center whitespace-nowrap rounded-[8px] bg-clay px-8 text-[17px] font-semibold text-white shadow-[0_8px_20px_rgba(194,70,39,0.18)] transition hover:bg-clayDark disabled:cursor-not-allowed disabled:opacity-55 max-[720px]:col-span-2 max-[720px]:w-full max-[390px]:px-4 max-[390px]:text-[15px]"
                 >
                   {isSubmitting ? `评分中${runtimeLabel ? ` · ${runtimeLabel}` : ""}` : latest && !latest.technical ? "重新评分" : "AI 评分"}
                 </button>
-                <button type="button" onClick={() => setState((prev) => saveDraft(prev, summaryDraft))} className="h-[52px] rounded-[8px] border border-[#d8c6b8] bg-white px-7 text-[16px] text-[#4b4138] transition hover:bg-[#fbf5ee]">
+                <button type="button" onClick={() => setState((prev) => saveDraft(prev, summaryDraft))} className="inline-flex h-[52px] items-center justify-center whitespace-nowrap rounded-[8px] border border-[#d8c6b8] bg-white px-7 text-[16px] text-[#4b4138] transition hover:bg-[#fbf5ee] max-[720px]:w-full max-[390px]:px-3 max-[390px]:text-[15px]">
                   保存当前句
                 </button>
-                <button type="button" disabled={!canSkip} onClick={forceSkip} className="h-[52px] rounded-[8px] border border-[#d8c6b8] bg-white px-7 text-[16px] text-[#4b4138] transition hover:bg-[#fbf5ee] disabled:cursor-not-allowed disabled:opacity-45">
+                <button type="button" disabled={!canSkip} onClick={forceSkip} className="inline-flex h-[52px] items-center justify-center whitespace-nowrap rounded-[8px] border border-[#d8c6b8] bg-white px-7 text-[16px] text-[#4b4138] transition hover:bg-[#fbf5ee] disabled:cursor-not-allowed disabled:opacity-45 max-[720px]:w-full max-[390px]:px-3 max-[390px]:text-[15px]">
                   失败后跳过
                 </button>
                 <button
                   type="button"
                   disabled={!canNext}
                   onClick={goNext}
-                  className="ml-auto inline-flex h-[52px] items-center gap-2 rounded-[8px] bg-[#eee9e3] px-7 text-[16px] text-[#b3aaa0] transition enabled:bg-[#f0dfd3] enabled:text-clayDark enabled:hover:bg-[#ead2c2] disabled:cursor-not-allowed"
+                  className="ml-auto inline-flex h-[52px] items-center justify-center gap-2 whitespace-nowrap rounded-[8px] bg-[#eee9e3] px-7 text-[16px] text-[#b3aaa0] transition enabled:bg-[#f0dfd3] enabled:text-clayDark enabled:hover:bg-[#ead2c2] disabled:cursor-not-allowed max-[720px]:col-span-2 max-[720px]:ml-0 max-[720px]:w-full max-[390px]:px-4 max-[390px]:text-[15px]"
                 >
                   <Lock className="h-4 w-4" strokeWidth={1.8} />
                   下一段
