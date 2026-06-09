@@ -395,7 +395,7 @@ function App() {
               <strong className="font-serif text-[38px] leading-none text-clay">{latest?.score ?? "--"}</strong>
               <span className="pb-1 font-serif text-[22px]">/ 100</span>
             </div>
-            <p className="mt-3 text-[15px]">结果：<strong className={latest?.passed ? "text-[#487241]" : "text-clay"}>{latest?.passed ? "通过" : latest ? "未通过" : "待评分"}</strong></p>
+            <p className="mt-3 text-[15px]">结果：<strong className={latest?.passed ? "text-[#487241]" : latest?.technical ? "text-[#9a6a22]" : "text-clay"}>{latest?.passed ? "通过" : latest?.technical ? "模型异常" : latest ? "未通过" : "待评分"}</strong></p>
             <p className="mt-1 text-[14px] text-[#5f554d]">通过线：{PASS_THRESHOLD} 分</p>
           </Card>
 
@@ -805,6 +805,7 @@ function modelLabel(config) {
 
 function submitHint(attempt) {
   if (!attempt) return "未提交前不能进入下一段。";
+  if (attempt.technical) return "模型没有完成有效评分，不能进入下一段，也不会解锁跳过。";
   if (attempt.passed) return "已通过，可以进入下一段。";
   if (attempt.forced) return "已强制跳过。";
   return "未通过，需要重写，或选择强制跳过。";
